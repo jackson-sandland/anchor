@@ -256,7 +256,7 @@ impl Parse for ErrorArgs {
 pub struct ErrorCode {
     pub id: u32,
     pub ident: Ident,
-    pub msg: Option<String>,
+    pub msg: Option<proc_macro2::TokenStream>,
 }
 
 // All well formed constraints on a single `Accounts` field.
@@ -444,7 +444,7 @@ pub struct ConstraintAssociatedSpace {
 #[derive(Debug, Clone)]
 #[allow(clippy::large_enum_variant)]
 pub enum PdaKind {
-    Program,
+    Program { owner: Option<Expr> },
     Token { owner: Expr, mint: Expr },
 }
 

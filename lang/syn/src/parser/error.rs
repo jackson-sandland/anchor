@@ -39,7 +39,7 @@ pub fn parse(error_enum: &mut syn::ItemEnum, args: Option<ErrorArgs>) -> Error {
     }
 }
 
-fn parse_error_attribute(variant: &syn::Variant) -> Option<String> {
+fn parse_error_attribute(variant: &syn::Variant) -> Option<proc_macro2::TokenStream> {
     let attrs = &variant.attrs;
     match attrs.len() {
         0 => None,
@@ -55,13 +55,7 @@ fn parse_error_attribute(variant: &syn::Variant) -> Option<String> {
                 proc_macro2::TokenTree::Group(g) => g.stream(),
                 _ => panic!("Invalid syntax"),
             };
-
-            let msg = match g_stream.into_iter().next() {
-                None => panic!("Must specify a message string"),
-                Some(msg) => msg.to_string().replace("\"", ""),
-            };
-
-            Some(msg)
+            Some(g_stream)
         }
         _ => {
             panic!("Too many attributes found. Use `msg` to specify error strings");
