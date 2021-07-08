@@ -343,8 +343,8 @@ impl<'ty> ConstraintGroupBuilder<'ty> {
                         space: associated_space.clone().map(|s| s.space.clone()),
                         kind: match &token_mint {
                             None => PdaKind::Program {
-																owner: pda_owner.clone(),
-														},
+                                owner: pda_owner.clone(),
+                            },
                             Some(tm) => PdaKind::Token {
                                 mint: tm.clone().into_inner().mint,
                                 owner: match &token_authority {

@@ -174,27 +174,25 @@ describe("permissioned-markets", () => {
 
   // Need to crank the cancel so that we can close later.
   it("Cranks the cancel transaction", async () => {
-    // Calculate the open orders accounts required for the crank.
-    // They must be in sort order.
-    const eq = await marketClient.loadEventQueue(provider.connection);
-    const oos = Array.from(
-      new Set(eq.map((event) => event.openOrders.toBuffer()))
-    );
-    oos.sort();
-    const openOrdersAccounts = oos.map((oo) => new PublicKey(oo));
-    const tx = new Transaction();
-    tx.add(
-      DexInstructions.consumeEvents({
-        market: marketClient._decoded.ownAddress,
-        eventQueue: marketClient._decoded.eventQueue,
-        coinFee: marketClient._decoded.eventQueue,
-        pcFee: marketClient._decoded.eventQueue,
-        openOrdersAccounts,
-        limit: 100,
-        programId: DEX_PID,
-      })
-    );
-    await provider.send(tx);
+    // TODO: can do this in a single transaction if we covert the pubkey bytes
+    //       into a [u64; 4] array and sort. I'm lazy though.
+    let eq = await marketClient.loadEventQueue(provider.connection);
+    while (eq.length > 0) {
+      const tx = new Transaction();
+      tx.add(
+        DexInstructions.consumeEvents({
+          market: marketClient._decoded.ownAddress,
+          eventQueue: marketClient._decoded.eventQueue,
+          coinFee: marketClient._decoded.eventQueue,
+          pcFee: marketClient._decoded.eventQueue,
+          openOrdersAccounts: [eq[0].openOrders],
+          limit: 1,
+          programId: DEX_PID,
+        })
+      );
+      await provider.send(tx);
+      eq = await marketClient.loadEventQueue(provider.connection);
+    }
   });
 
   it("Settles funds on the orderbook", async () => {
