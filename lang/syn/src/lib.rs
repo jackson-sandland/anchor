@@ -256,7 +256,7 @@ impl Parse for ErrorArgs {
 pub struct ErrorCode {
     pub id: u32,
     pub ident: Ident,
-    pub msg: Option<proc_macro2::TokenStream>,
+    pub msg: Option<String>,
 }
 
 // All well formed constraints on a single `Accounts` field.
