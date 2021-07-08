@@ -361,10 +361,10 @@ fn parse_ty(f: &Field) -> (proc_macro2::TokenStream, proc_macro2::TokenStream, b
             let ident = &ty.account_ident;
             (
                 quote! {
-                        #ident
+                    #ident
                 },
                 quote! {
-                        anchor_lang::ProgramAccount
+                    anchor_lang::ProgramAccount
                 },
                 false,
             )
@@ -373,10 +373,10 @@ fn parse_ty(f: &Field) -> (proc_macro2::TokenStream, proc_macro2::TokenStream, b
             let ident = &ty.account_ident;
             (
                 quote! {
-                        #ident
+                    #ident
                 },
                 quote! {
-                        anchor_lang::Loader
+                    anchor_lang::Loader
                 },
                 true,
             )
@@ -385,10 +385,10 @@ fn parse_ty(f: &Field) -> (proc_macro2::TokenStream, proc_macro2::TokenStream, b
             let ident = &ty.account_ident;
             (
                 quote! {
-                        #ident
+                    #ident
                 },
                 quote! {
-                        anchor_lang::CpiAccount
+                    anchor_lang::CpiAccount
                 },
                 false,
             )
@@ -545,7 +545,7 @@ pub fn generate_pda(
         },
         PdaKind::Program { owner } => {
             // Owner of the account being created. If not specified,
-            //d efault to the currently executing program.
+            // default to the currently executing program.
             let owner = match owner {
                 None => quote! {
                     program_id
